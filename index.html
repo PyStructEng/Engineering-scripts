@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Scripts Library</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px 30px 100px;
+        }
+
+        .category {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+        }
+
+        .category-icon {
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        .files {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .file-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .file-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+
+        .file-type {
+            font-size: 0.85em;
+            color: #6c757d;
+            text-transform: uppercase;
+        }
+
+        .coffee-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #FFDD00;
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+        }
+
+        .coffee-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            background: #FFE84D;
+        }
+
+        .upload-info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        .upload-info h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .upload-info p {
+            color: #424242;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .category-title {
+                font-size: 1.5em;
+            }
+            
+            .files {
+                grid-template-columns: 1fr;
+            }
+            
+            .coffee-button {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Engineering Scripts Library</h1>
+            <p class="subtitle">CalcPad, JupyterLab & Python Scripts for Structural Engineering</p>
+        </header>
+
+        <div class="content">
+            <div class="upload-info">
+                <h3>How to Add Your Files:</h3>
+                <p>
+                    1. Save this HTML file to your computer<br>
+                    2. Place your script files in the same folder as this HTML file<br>
+                    3. Edit the sections below to add links to your files<br>
+                    4. Update the href="#" with the actual filename (e.g., href="my_script.cpd")
+                </p>
+            </div>
+
+            <!-- Reinforced Concrete Section -->
+            <div class="category">
+                <h2 class="category-title">
+                    <span class="category-icon">🏗️</span>
+                    Reinforced Concrete
+                </h2>
+                <div class="files">
+                    <a href="beam_design.cpd" class="file-item" download>
+                        <div class="file-name">Beam Design Calculator</div>
+                        <div class="file-type">CalcPad Script</div>
+                    </a>
+                    <a href="column_analysis.ipynb" class="file-item" download>
+                        <div class="file-name">Column Analysis</div>
+                        <div class="file-type">Jupyter Notebook</div>
+                    </a>
+                    <a href="slab_design.py" class="file-item" download>
+                        <div class="file-name">Slab Design</div>
+                        <div class="file-type">Python Script</div>
+                    </a>
+                    <!-- Add more files here -->
+                </div>
+            </div>
+
+            <!-- Steel Section -->
+            <div class="category">
+                <h2 class="category-title">
+                    <span class="category-icon">🔩</span>
+                    Steel
+                </h2>
+                <div class="files">
+                    <a href="steel_beam.cpd" class="file-item" download>
+                        <div class="file-name">Steel Beam Design</div>
+                        <div class="file-type">CalcPad Script</div>
+                    </a>
+                    <a href="connection_design.ipynb" class="file-item" download>
+                        <div class="file-name">Connection Design</div>
+                        <div class="file-type">Jupyter Notebook</div>
+                    </a>
+                    <a href="truss_analysis.py" class="file-item" download>
+                        <div class="file-name">Truss Analysis</div>
+                        <div class="file-type">Python Script</div>
+                    </a>
+                    <!-- Add more files here -->
+                </div>
+            </div>
+
+            <!-- Timber Section -->
+            <div class="category">
+                <h2 class="category-title">
+                    <span class="category-icon">🌲</span>
+                    Timber
+                </h2>
+                <div class="files">
+                    <a href="timber_beam.cpd" class="file-item" download>
+                        <div class="file-name">Timber Beam Design</div>
+                        <div class="file-type">CalcPad Script</div>
+                    </a>
+                    <a href="glulam_design.ipynb" class="file-item" download>
+                        <div class="file-name">Glulam Design</div>
+                        <div class="file-type">Jupyter Notebook</div>
+                    </a>
+                    <a href="timber_connections.py" class="file-item" download>
+                        <div class="file-name">Timber Connections</div>
+                        <div class="file-type">Python Script</div>
+                    </a>
+                    <!-- Add more files here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://www.buymeacoffee.com/armans01" class="coffee-button" target="_blank">
+        ☕ Buy me a coffee
+    </a>
+</body>
+</html>
