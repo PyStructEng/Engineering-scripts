@@ -1,0 +1,67 @@
+" Steel HSS Section Properties <hr/><small>According to <strong>Canadian Standards: CSA S16</strong></small>
+ '<div style = "max-width:180mm" > 
+
+'<table><tr><td>
+'<h4>Dimensions</h4>
+#pre
+'<p>Select Section - 
+'<select data-target="section"> 
+#post
+'<p>Section type -
+'<select data-target="section" style="font-weight:bold; border:none; background: none; color: black; box-shadow:none; appearance: none;">
+
+#show
+'<option value=1>HSS254X254X12.7</option>
+'<option value=2>HSS254X254X9.5</option>
+'<option value=3>HSS254X254X7.9</option>
+'<option value=4>HSS254X254X6.4</option>
+'<option value=5>HSS203.2X203.2X6.4</option>
+'<option value=6>HSS152.4X152.4X6.4</option>
+'</select></p>
+
+'<p id="section" style="display:none;">'id = ? {5}'</p>
+
+
+#hide
+#read HSS from Section_data.xlsm@HSS!B2
+S = HSS
+
+'we are reading sheet HSS and data starts from B2
+
+' Now we have to get the section properties 
+
+A = S.(id; 2)*mm^2
+h = S.(id; 3)*mm
+b = S.(id; 5)*mm
+
+t_f = S.(id; 8)*mm
+t_w = S.(id; 8)*mm
+
+I_x = S.(id; 11)*1000000*mm^4
+I_y = S.(id; 15)*1000000*mm^4
+
+S_x = S.(id; 13)*1000*mm^3
+S_y = S.(id; 17)*1000*mm^3
+
+r_x = S.(id; 14)*mm
+r_y = S.(id; 18)*mm
+
+J = S.(id; 19)*1000*mm^4
+C = S.(id; 20)*1000000*mm^6
+
+#post
+'<h4>Section properties (from Excel)</h4>
+'<table style="width:100%">
+'<tr><td>'h'</td><td>'b'</td><td>'t_f'</td><td>'t_w'</td><td>'A'</td></tr>
+'<tr><td>'I_x'</td><td>'I_y'</td><td>'S_x'</td><td>'S_y'</td><td></td></tr>
+'<tr><td>'r_x'</td><td>'r_y'</td><td>'J'</td><td>'C'</td><td></td></tr>
+'</table>
+
+'<h4>Moment capacity calculation</h4>
+φ = 0.9
+F_y = 350MPa
+
+M_r = φ*F_y*S_x
+
+
+
