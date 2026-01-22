@@ -1,0 +1,51 @@
+
+'<h3>Example - Net factored wind uplift calculation per NBCC 4.1.7.1(3)</h3>
+
+'<h3>Information</h3>
+
+' Importance factor - ,'I_w = 1.0
+' Hourly wind pressure - ,'q = 7.93' psf
+' Height of the building - ,'h = 22'ft
+
+
+'<h4>Interior Pressure Calculations</h4>
+
+C_ei = 0.9' (Open Terrain)
+C_gi = 2.0
+C_pi_max = 0.30
+C_pi_min = -0.45
+
+'Maximum Interior building pressure (+ = Upward Load on Roof)
+P_i_max = I_w*q*C_ei*C_gi*C_pi_max' psf
+
+'Minimum Interior building pressure (- = Downward Load on Roof)
+P_i_min = I_w*q*C_ei*C_gi*C_pi_min' psf
+
+
+'<h4>Exterior Pressure Calculations</h4>
+
+C_e = 0.923
+CpCg_max = 0.30' (from Commentary figure I-9)
+CpCg_min = -1.50' (from Commentary figure I-9)
+
+'Minimum exterior building pressure (- = Upward Load on Roof)
+P_e_min = I_w*q*C_e*CpCg_min'psf 
+
+'Maximum exterior building pressure (+ = Downward Load on Roof)
+
+P_e_max = I_w*q*C_e*CpCg_max'psf 
+
+
+
+'<h3>Net factored wind uplift calculation</h3>
+
+'Maximum wind pressure on roof- 'P_max = P_e_min - P_i_max'psf
+
+'Dead load on the roof - ,'DL = 20'psf
+
+
+'Factored net uplift,'P_f_uplift = 0.9*DL + 1.4*P_max'psf
+
+
+
+
