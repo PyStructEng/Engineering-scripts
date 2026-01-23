@@ -1,0 +1,185 @@
+"<h2>Moment Capacity of Rectangular Concrete Beam - CSA A23.3-19</h2>"
+
+'<hr>'
+
+"<h3>Input Parameters</h3>"
+
+'<b>Beam Geometry</b>'
+b = 250mm
+'Width of beam'
+h = 300mm
+'Overall depth of beam'
+d_cover = 40mm
+'Cover to centroid of tension steel'
+d = h - d_cover
+'Effective depth'
+
+'<b>Material Properties</b>'
+f_c = 30MPa
+'Specified compressive strength of concrete'
+f_y = 400MPa
+'Specified yield strength of steel'
+
+'<b>Reinforcement</b>'
+A_s = 600mm^2
+'Area of tension reinforcement'
+
+'<b>Material Resistance Factors (CSA A23.3 Cl. 8.4.2)</b>'
+φ_c = 0.65
+'Resistance factor for concrete'
+φ_s = 0.85
+'Resistance factor for steel'
+
+'<hr>'
+
+"<h3>Calculations</h3>"
+
+'<b>Step 1: Material Properties</b>'
+α_1 = if(f_c ≤ 30MPa; 0.85 - 0.0015*f_c/MPa; if(f_c ≤ 55MPa; 0.67 + (f_c/MPa - 55)/1500; 0.67))
+'Stress block parameter α₁ (Cl. 10.1.7)'
+β_1 = if(f_c ≤ 55MPa; 0.97 - 0.0025*f_c/MPa; 0.67)
+'Stress block parameter β₁ (Cl. 10.1.7)'
+
+'<b>Step 2: Reinforcement Ratio</b>'
+ρ = A_s/(b*d)
+'Actual reinforcement ratio'
+
+E_s = 200000MPa
+'Modulus of elasticity of steel'
+ε_c = 0.0035
+'Ultimate concrete compressive strain (Cl. 10.1.3)'
+ε_y = f_y/E_s
+'Yield strain of steel'
+
+'<b>Step 3: Balanced Reinforcement Ratio (Cl. 10.5.2)</b>'
+c_b = ε_c*d/(ε_c + ε_y)
+'Balanced neutral axis depth'
+ρ_b = α_1*β_1*φ_c*f_c/(φ_s*f_y)*ε_c/(ε_c + ε_y)
+'Balanced reinforcement ratio'
+
+'<b>Step 4: Check Section Type</b>'
+#if ρ ≤ ρ_b
+	    '<p style="color:green"><b>Section is TENSION-CONTROLLED (ductile)</b></p>'
+#else
+	    '<p style="color:red"><b>WARNING: Section is OVER-REINFORCED (brittle failure)</b></p>'
+#end if
+
+'<b>Step 5: Determine Neutral Axis Depth</b>'
+'For tension-controlled section, steel yields before concrete crushes:'
+c = φ_s*f_y*A_s/(α_1*φ_c*f_c*β_1*b)
+'Neutral axis depth from compression face'
+
+'Verify steel has yielded:'
+ε_s = ε_c*(d - c)/c
+'Strain in tension steel'
+#if ε_s ≥ ε_y
+	    '<p style="color:green">Steel has yielded (ε_s ≥ ε_y) ✓</p>'
+	    f_s = f_y
+	    'Stress in steel'
+#else
+	    '<p style="color:orange">Steel has NOT yielded - using actual stress</p>'
+	    f_s = ε_s*E_s
+	    'Stress in steel'
+	    'Recalculate neutral axis depth:'
+	    c = ε_c*d/(ε_c + ε_s)
+#end if
+
+'<b>Step 6: Calculate Factored Moment Resistance</b>'
+a = β_1*c
+'Depth of equivalent rectangular stress block'
+
+'Check stress block is within section depth:'
+#if a ≤ h
+	    '<p style="color:green">Stress block is within section depth ✓</p>'
+#else
+	    '<p style="color:red">ERROR: Stress block exceeds section depth!</p>'
+#end if
+
+C = α_1*φ_c*f_c*a*b
+'Factored compressive force'
+T = φ_s*f_s*A_s
+'Factored tensile force'
+
+'Force equilibrium check:'
+equilibrium_check = abs(C - T)/C*100%
+'Difference between C and T'
+#if equilibrium_check < 0.1%
+	    '<p style="color:green">Force equilibrium satisfied ✓</p>'
+#else
+	    '<p style="color:orange">Force equilibrium check: difference = {equilibrium_check}</p>'
+#end if
+
+M_r = φ_s*f_s*A_s*(d - a/2)
+'<b>Factored moment resistance</b>'
+
+'Alternative calculation:'
+M_r_check = C*(d - a/2)
+'Moment resistance from compression force'
+
+'<hr>'
+
+"<h3>Summary of Key Results</h3>"
+
+'<b>Input Parameters:</b>'
+'Width (b):'
+b|mm
+'Effective Depth (d):'
+d|mm
+'Steel Area (A_s):'
+A_s|mm^2
+'f_c:'
+f_c|MPa
+'f_y:'
+f_y|MPa
+
+'<b>Design Ratios:</b>'
+'Reinforcement Ratio (ρ):'
+ρ
+'Balanced Ratio (ρ_b):'
+ρ_b
+'Neutral Axis Depth (c):'
+c|mm
+'c/d Ratio:'
+c/d
+'Steel Strain (ε_s):'
+ε_s
+
+'<p style="background-color:#d4edda; padding:10px; border:2px solid #28a745;"><b>Factored Moment Resistance (M_r):</b></p>'
+M_r|kNm
+
+'<hr>'
+
+"<h3>Code Compliance Checks</h3>"
+
+'<b>Minimum Reinforcement (CSA A23.3 Cl. 10.5.1.2)</b>'
+A_s_min = max(0.2*sqr(f_c/MPa)/f_y*MPa; 1.4/f_y*MPa)*b*d
+'Minimum area of tension reinforcement'
+#if A_s ≥ A_s_min
+	    '<p style="color:green">✓ Minimum reinforcement requirement satisfied</p>'
+	    'Provided:'
+	    A_s|mm^2
+	    '≥ Required:'
+	    A_s_min|mm^2
+#else
+	    '<p style="color:red">✗ Does NOT meet minimum reinforcement requirement</p>'
+	    'Provided:'
+	    A_s|mm^2
+	    '< Required:'
+	    A_s_min|mm^2
+#end if
+
+'<b>Maximum Spacing (CSA A23.3 Cl. 10.6.1)</b>'
+s_max = min(500mm; 2*h)
+'Maximum spacing of tension reinforcement'
+'Maximum permitted spacing:'
+s_max|mm
+
+'<b>Ductility Check</b>'
+#if c/d ≤ 0.5
+	    '<p style="color:green">✓ Ductile section (c/d ≤ 0.5)</p>'
+#else
+	    '<p style="color:orange">⚠ Section may have reduced ductility (c/d > 0.5)</p>'
+#end if
+
+'<hr>'
+"<p><i>Calculation completed in accordance with CSA A23.3-19</i></p>"
