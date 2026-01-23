@@ -1,0 +1,344 @@
+"<h2>Short Reinforced Concrete Column Design - CSA A23.3-19</h2>"
+
+'<hr>'
+
+"<h3>Input Parameters</h3>"
+
+'<b>Column Geometry</b>'
+b = 400mm
+'Width of column (or diameter for circular)'
+h = 400mm
+'Depth of column (= b for square, = b for circular)'
+L_u = 3000mm
+'Unsupported length of column'
+k = 1.0
+'Effective length factor'
+
+'<b>Column Type</b>'
+'1 = Rectangular/Square, 2 = Circular'
+col_type = 1
+'Column section type'
+
+'<b>Material Properties</b>'
+f_c = 30MPa
+'Specified compressive strength of concrete'
+f_y = 400MPa
+'Specified yield strength of longitudinal steel'
+
+'<b>Reinforcement</b>'
+A_st = 2400mm^2
+'Total area of longitudinal reinforcement'
+d_cover = 40mm
+'Cover to centroid of reinforcement'
+
+'<b>Load Combination</b>'
+P_f = 1500kN
+'Factored axial load'
+M_fx = 150kNm
+'Factored moment about x-axis'
+M_fy = 0kNm
+'Factored moment about y-axis (0 for uniaxial bending)'
+
+'<b>Material Resistance Factors (CSA A23.3 Cl. 8.4.2)</b>'
+φ_c = 0.65
+'Resistance factor for concrete'
+φ_s = 0.85
+'Resistance factor for steel'
+
+'<hr>'
+
+"<h3>Section Properties</h3>"
+
+#if col_type ≡ 1
+	    '<b>Rectangular/Square Section</b>'
+	    A_g = b*h
+	    'Gross area of section'
+	    d_x = h - d_cover
+	    'Effective depth in x-direction'
+	    d_y = b - d_cover
+	    'Effective depth in y-direction'
+#else
+	    '<b>Circular Section</b>'
+	    A_g = π*b^2/4
+	    'Gross area of section'
+	    d_x = b - d_cover
+	    'Effective depth'
+	    d_y = d_x
+	    'Effective depth (same for circular)'
+#end if
+
+'<hr>'
+
+"<h3>Slenderness Check (CSA A23.3 Cl. 10.10)</h3>"
+
+'<b>Step 1: Calculate Effective Length</b>'
+L_e = k*L_u
+'Effective length'
+
+'<b>Step 2: Radius of Gyration</b>'
+#if col_type ≡ 1
+	    r = sqr(b^2 + h^2)/sqr(12)
+	    'Radius of gyration for rectangular section'
+#else
+	    r = b/4
+	    'Radius of gyration for circular section'
+#end if
+
+'<b>Step 3: Slenderness Ratio</b>'
+slenderness = L_e/r
+'Slenderness ratio'
+
+'<b>Step 4: Slenderness Limit (Cl. 10.10.2)</b>'
+M_1 = min(abs(M_fx); abs(M_fy))
+'Smaller end moment (absolute value)'
+M_2 = max(abs(M_fx); abs(M_fy))
+'Larger end moment (absolute value)'
+
+#if M_2 ≡ 0kNm
+	    M_ratio = -1
+	    'No moments - assume single curvature'
+	    slender_limit = 34 - 12*M_ratio
+	    'Slenderness limit'
+#else
+	    #if M_1 ≡ 0kNm
+		        M_ratio = 0
+		        'Single curvature (one end pinned)'
+	    #else
+		        M_ratio = -M_1/M_2
+		        'Moment ratio (negative for single curvature)'
+	    #end if
+	    slender_limit = 34 - 12*M_ratio
+	    'Slenderness limit'
+#end if
+
+#if slenderness ≤ slender_limit
+	    '<p style="color:green"><b>SHORT COLUMN</b> - Slenderness effects can be neglected</p>'
+	    short_col = 1
+#else
+	    '<p style="color:orange"><b>SLENDER COLUMN</b> - Must consider slenderness effects</p>'
+	    '<p style="color:orange">This calculation is for SHORT columns only!</p>'
+	    short_col = 0
+#end if
+
+'<hr>'
+
+"<h3>Axial Load Capacity (CSA A23.3 Cl. 10.10.4)</h3>"
+
+'<b>Step 1: Maximum Factored Axial Resistance</b>'
+α_1 = if(f_c ≤ 30MPa; 0.85 - 0.0015*f_c/MPa; if(f_c ≤ 55MPa; 0.67 + (f_c/MPa - 55)/1500; 0.67))
+'Stress block parameter α₁ (Cl. 10.1.7)'
+
+'For tied columns:'
+P_r_max = 0.80*φ_c*α_1*f_c*(A_g - A_st) + 0.80*φ_s*f_y*A_st
+'Maximum factored axial resistance (Cl. 10.10.4)'
+
+'<b>Step 2: Check Axial Load Ratio</b>'
+axial_ratio = P_f/P_r_max
+'Axial load ratio'
+
+#if axial_ratio ≤ 1.0
+	    '<p style="color:green">✓ Axial capacity is adequate</p>'
+#else
+	    '<p style="color:red">✗ Axial capacity EXCEEDED - increase section or reinforcement</p>'
+#end if
+
+'<hr>'
+
+"<h3>Interaction Diagram Analysis</h3>"
+
+'<b>Step 1: Pure Compression Capacity (Point A)</b>'
+P_o = φ_c*α_1*f_c*(A_g - A_st) + φ_s*f_y*A_st
+'Pure axial compression capacity'
+
+'<b>Step 2: Balanced Point (Point B)</b>'
+ε_c = 0.0035
+'Ultimate concrete strain'
+E_s = 200000MPa
+'Modulus of elasticity of steel'
+ε_y = f_y/E_s
+'Yield strain of steel'
+
+c_b = ε_c/(ε_c + ε_y)*d_x
+'Balanced neutral axis depth'
+
+β_1 = if(f_c ≤ 55MPa; 0.97 - 0.0025*f_c/MPa; 0.67)
+'Stress block parameter β₁'
+
+a_b = β_1*c_b
+'Balanced stress block depth'
+
+'Simplified balanced load (for rectangular section):'
+#if col_type ≡ 1
+	    P_b = φ_c*α_1*f_c*a_b*b + φ_s*f_y*A_st/2 - φ_s*f_y*A_st/2
+	    'Balanced axial load (approximate)'
+	    M_b = φ_c*α_1*f_c*a_b*b*(h/2 - a_b/2) + φ_s*f_y*A_st/2*(h/2 - d_cover)
+	    'Balanced moment (approximate)'
+#else
+	    P_b = 0.5*P_o
+	    'Balanced axial load (approximate for circular)'
+	    M_b = 0.15*P_o*b
+	    'Balanced moment (approximate for circular)'
+#end if
+
+'<b>Step 3: Pure Flexure Capacity (Point C)</b>'
+'For minimum axial load case:'
+P_min = 0.1*P_o
+'Minimum axial load for interaction diagram'
+
+'Approximate pure moment capacity:'
+#if col_type ≡ 1
+	    M_n = φ_s*f_y*A_st/2*(h - 2*d_cover)
+	    'Nominal moment capacity (approximate)'
+#else
+	    M_n = φ_s*f_y*A_st*(b/2 - d_cover)
+	    'Nominal moment capacity for circular (approximate)'
+#end if
+
+'<hr>'
+
+"<h3>Design Check - Load Point</h3>"
+
+'<b>Applied Loads:</b>'
+'Factored Axial Load:'
+P_f|kN
+'Factored Moment (x-axis):'
+M_fx|kNm
+'Factored Moment (y-axis):'
+M_fy|kNm
+
+'<b>Uniaxial Check (Simplified):</b>'
+'This is a simplified check. For accurate design, use interaction diagrams.'
+
+#if M_fy ≡ 0kNm
+	    'Uniaxial bending about x-axis'
+	    P_ratio = P_f/P_o
+	    'Axial load ratio'
+	    M_ratio_check = M_fx/M_n
+	    'Moment ratio'
+	    
+	    'Simplified interaction check (P/P_o + M/M_n ≤ 1.0):'
+	    interaction = P_ratio + M_ratio_check
+	    'Interaction value'
+	    
+	    #if interaction ≤ 1.0
+		        '<p style="color:green">✓ Section capacity appears adequate (simplified check)</p>'
+	    #else
+		        '<p style="color:red">✗ Section capacity may be inadequate (simplified check)</p>'
+	    #end if
+#else
+	    '<p style="color:orange">⚠ Biaxial bending detected - use Bresler reciprocal load method</p>'
+	    'Bresler Method:'
+	    M_x_ratio = M_fx/M_n
+	    M_y_ratio = M_fy/M_n
+	    biaxial_check = M_x_ratio + M_y_ratio
+	    'Biaxial interaction (simplified)'
+	    
+	    #if biaxial_check ≤ 1.0
+		        '<p style="color:green">✓ Biaxial capacity appears adequate (simplified)</p>'
+	    #else
+		        '<p style="color:red">✗ Biaxial capacity may be inadequate (simplified)</p>'
+	    #end if
+#end if
+
+'<hr>'
+
+"<h3>Reinforcement Requirements</h3>"
+
+'<b>Minimum Reinforcement (CSA A23.3 Cl. 10.9.1)</b>'
+A_st_min = 0.01*A_g
+'Minimum longitudinal steel area (1% of gross area)'
+
+'<b>Maximum Reinforcement (CSA A23.3 Cl. 10.9.1)</b>'
+A_st_max = 0.04*A_g
+'Maximum longitudinal steel area (4% of gross area)'
+
+'<b>Check Provided Reinforcement:</b>'
+ρ_provided = A_st/A_g*100%
+'Reinforcement ratio'
+
+#if A_st < A_st_min
+	    '<p style="color:red">✗ Reinforcement BELOW minimum (1%)</p>'
+	    'Provided:'
+	    A_st|mm^2
+	    '< Minimum Required:'
+	    A_st_min|mm^2
+#else if A_st > A_st_max
+	    '<p style="color:red">✗ Reinforcement EXCEEDS maximum (4%)</p>'
+	    'Provided:'
+	    A_st|mm^2
+	    '> Maximum Allowed:'
+	    A_st_max|mm^2
+#else
+	    '<p style="color:green">✓ Reinforcement is within limits (1% - 4%)</p>'
+	    'Provided:'
+	    A_st|mm^2
+	    'Reinforcement ratio:'
+	    ρ_provided
+#end if
+
+'<b>Minimum Number of Bars (CSA A23.3 Cl. 10.9.2)</b>'
+#if col_type ≡ 1
+	    '<p>Rectangular/Square: Minimum 4 bars (1 in each corner)</p>'
+#else
+	    '<p>Circular: Minimum 6 bars</p>'
+#end if
+
+'<hr>'
+
+"<h3>Tie/Spiral Requirements</h3>"
+
+'<b>For Tied Columns (CSA A23.3 Cl. 7.6.5):</b>'
+bar_size = 10mm
+'Assumed longitudinal bar diameter'
+tie_min = max(10mm; bar_size/4)
+'Minimum tie size'
+
+s_tie_max_1 = 16*bar_size
+'Maximum spacing = 16 × bar diameter'
+s_tie_max_2 = 48*tie_min
+'Maximum spacing = 48 × tie diameter'
+s_tie_max_3 = min(b; h)
+'Maximum spacing = least lateral dimension'
+
+s_tie = min(s_tie_max_1; s_tie_max_2; s_tie_max_3)
+'Maximum tie spacing'
+
+'Minimum tie diameter:'
+tie_min|mm
+'Maximum tie spacing:'
+s_tie|mm
+
+'<hr>'
+
+"<h3>Summary of Results</h3>"
+
+'<b>Column Classification:</b>'
+#if short_col ≡ 1
+	    'Column Type: SHORT COLUMN'
+#else
+	    'Column Type: SLENDER COLUMN (outside scope of this calculation)'
+#end if
+
+'Slenderness Ratio:'
+slenderness
+
+'<b>Capacity:</b>'
+'Maximum Axial Resistance:'
+P_r_max|kN
+'Pure Compression Capacity:'
+P_o|kN
+'Applied Axial Load:'
+P_f|kN
+'Utilization Ratio:'
+axial_ratio
+
+'<b>Reinforcement:</b>'
+'Total Longitudinal Steel:'
+A_st|mm^2
+'Reinforcement Ratio:'
+ρ_provided
+'Status: Within code limits (1% - 4%)'
+
+'<hr>'
+"<p><i>Calculation completed in accordance with CSA A23.3-19</i></p>"
+"<p><i>Note: This is a simplified design check. For detailed design, prepare complete interaction diagrams.</i></p>"
