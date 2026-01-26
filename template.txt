@@ -1,0 +1,391 @@
+'<style>
+    body { 
+        font-family: Arial, sans-serif; 
+        line-height: 1.6; 
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .header-box {
+        border: 3px solid #2c3e50;
+        padding: 20px;
+        margin-bottom: 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .header-title {
+        font-size: 28px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    .header-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        background: rgba(255,255,255,0.1);
+        padding: 15px;
+        border-radius: 5px;
+    }
+    .header-item {
+        display: flex;
+        align-items: center;
+    }
+    .header-label {
+        font-weight: bold;
+        margin-right: 10px;
+        min-width: 120px;
+    }
+    .header-value {
+        flex: 1;
+        background: rgba(255,255,255,0.9);
+        color: #2c3e50;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-weight: 500;
+    }
+    .section-box {
+        border: 2px solid #3498db;
+        margin: 25px 0;
+        padding: 0;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .section-header {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        color: white;
+        padding: 15px 20px;
+        font-size: 20px;
+        font-weight: bold;
+        border-bottom: 3px solid #2980b9;
+    }
+    .section-content {
+        padding: 20px;
+        background: #f8f9fa;
+    }
+    .subsection {
+        background: white;
+        padding: 15px;
+        margin: 15px 0;
+        border-left: 4px solid #3498db;
+        border-radius: 4px;
+    }
+    .subsection-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+    .subsection-title:before {
+        content: "▸";
+        margin-right: 8px;
+        color: #3498db;
+        font-size: 18px;
+    }
+    .result-box {
+        background: #d4edda;
+        border: 2px solid #28a745;
+        border-left: 6px solid #28a745;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 4px;
+    }
+    .result-title {
+        font-weight: bold;
+        color: #155724;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    .warning-box {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        border-left: 6px solid #ffc107;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 4px;
+    }
+    .info-box {
+        background: #d1ecf1;
+        border: 2px solid #17a2b8;
+        border-left: 6px solid #17a2b8;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 4px;
+    }
+    .calc-note {
+        font-style: italic;
+        color: #6c757d;
+        font-size: 14px;
+        margin: 10px 0;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 15px 0;
+        background: white;
+    }
+    th {
+        background: #2c3e50;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: bold;
+    }
+    td {
+        padding: 10px 12px;
+        border: 1px solid #dee2e6;
+    }
+    tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+    .footer {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 3px solid #2c3e50;
+        text-align: center;
+        color: #6c757d;
+    }
+    .signature-box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-top: 40px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+    .signature-line {
+        border-top: 2px solid #2c3e50;
+        padding-top: 10px;
+        margin-top: 40px;
+        text-align: center;
+    }
+</style>'
+
+'<div class="header-box">'
+'<div class="header-title">STRUCTURAL DESIGN CALCULATIONS</div>'
+'<div class="header-grid">'
+'<div class="header-item"><span class="header-label">Project Name:</span><span class="header-value">Example Office Building</span></div>'
+'<div class="header-item"><span class="header-label">Project No:</span><span class="header-value">2025-001</span></div>'
+'<div class="header-item"><span class="header-label">Designer:</span><span class="header-value">John Smith, P.Eng</span></div>'
+'<div class="header-item"><span class="header-label">Date:</span><span class="header-value">January 26, 2025</span></div>'
+'<div class="header-item"><span class="header-label">Design Code:</span><span class="header-value">CSA A23.3-19</span></div>'
+'<div class="header-item"><span class="header-label">Revision:</span><span class="header-value">Rev. 0</span></div>'
+'</div>'
+'</div>'
+
+'<div class="info-box">'
+'<b>Calculation Purpose:</b> [Brief description of what is being designed/analyzed]'
+'</div>'
+
+'<hr style="border: 2px solid #2c3e50; margin: 30px 0;">'
+
+"<h2 style='color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px;'>1. DESIGN BASIS</h2>"
+
+'<div class="subsection">'
+'<div class="subsection-title">1.1 Design Codes and Standards</div>'
+'<ul>'
+'<li>National Building Code of Canada (NBCC) 2020</li>'
+'<li>CSA A23.3-19: Design of Concrete Structures</li>'
+'<li>[Add other applicable codes]</li>'
+'</ul>'
+'</div>'
+
+'<div class="subsection">'
+'<div class="subsection-title">1.2 Design Assumptions</div>'
+'<ul>'
+'<li>[List key assumptions]</li>'
+'<li>[Material properties]</li>'
+'<li>[Boundary conditions]</li>'
+'</ul>'
+'</div>'
+
+'<hr style="border: 1px solid #dee2e6; margin: 30px 0;">'
+
+"<h2 style='color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px;'>2. INPUT DATA</h2>"
+
+'<div class="section-box">'
+'<div class="section-header">2.1 Geometry</div>'
+'<div class="section-content">'
+
+'<p class="calc-note">Enter your geometric parameters below:</p>'
+
+'<!-- USER INPUT SECTION - MODIFY VALUES HERE -->'
+
+b = 300mm
+'Width of member'
+h = 500mm
+'Overall depth'
+L = 6000mm
+'Span length'
+
+'</div>'
+'</div>'
+
+'<div class="section-box">'
+'<div class="section-header">2.2 Material Properties</div>'
+'<div class="section-content">'
+
+f_c = 30MPa
+'Concrete compressive strength'
+f_y = 400MPa
+'Steel yield strength'
+E_c = 4500*sqrt(f_c/MPa)*MPa
+'Concrete modulus of elasticity'
+
+'<table>'
+'<tr><th>Material</th><th>Property</th><th>Value</th><th>Unit</th></tr>'
+'<tr><td>Concrete</td><td>f\'c</td><td style="text-align:right">{f_c/MPa}</td><td>MPa</td></tr>'
+'<tr><td>Concrete</td><td>Ec</td><td style="text-align:right">{E_c/MPa}</td><td>MPa</td></tr>'
+'<tr><td>Steel</td><td>fy</td><td style="text-align:right">{f_y/MPa}</td><td>MPa</td></tr>'
+'</table>'
+
+'</div>'
+'</div>'
+
+'<div class="section-box">'
+'<div class="section-header">2.3 Loading</div>'
+'<div class="section-content">'
+
+DL = 5kN/m
+'Dead load'
+LL = 3kN/m
+'Live load'
+w_total = 1.25*DL + 1.5*LL
+'Factored load combination (1.25D + 1.5L)'
+
+'<p><b>Load Summary:</b></p>'
+'Dead Load:'
+DL|kN/m
+'Live Load:'
+LL|kN/m
+'Factored Load:'
+w_total|kN/m
+
+'</div>'
+'</div>'
+
+'<hr style="border: 1px solid #dee2e6; margin: 30px 0;">'
+
+"<h2 style='color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px;'>3. CALCULATIONS</h2>"
+
+'<div class="section-box">'
+'<div class="section-header">3.1 Analysis</div>'
+'<div class="section-content">'
+
+'<p class="calc-note">For simply supported beam:</p>'
+
+'<div class="subsection">'
+'<div class="subsection-title">Bending Moment</div>'
+M_max = w_total*L^2/8
+'Maximum bending moment at midspan'
+'</div>'
+
+'<div class="subsection">'
+'<div class="subsection-title">Shear Force</div>'
+V_max = w_total*L/2
+'Maximum shear force at support'
+'</div>'
+
+'</div>'
+'</div>'
+
+'<div class="section-box">'
+'<div class="section-header">3.2 Design</div>'
+'<div class="section-content">'
+
+'<p class="calc-note">Add your design calculations here...</p>'
+
+'<!-- USER CALCULATION SECTION -->'
+'Example calculation:'
+A_req = 1000mm^2
+'Required area'
+
+'</div>'
+'</div>'
+
+'<div class="section-box">'
+'<div class="section-header">3.3 Design Checks</div>'
+'<div class="section-content">'
+
+'<!-- Add your design checks here -->'
+
+ratio = 0.85
+'Utilization ratio'
+
+#if ratio ≤ 1.0
+    '<div class="result-box">'
+    '<div class="result-title">✓ CHECK PASSED</div>'
+    'Utilization Ratio:'
+    ratio
+    '<p>Design is adequate.</p>'
+    '</div>'
+#else
+    '<div class="warning-box">'
+    '<div class="result-title">✗ CHECK FAILED</div>'
+    'Utilization Ratio:'
+    ratio
+    '<p>Design is inadequate - increase section size.</p>'
+    '</div>'
+#end if
+
+'</div>'
+'</div>'
+
+'<hr style="border: 1px solid #dee2e6; margin: 30px 0;">'
+
+"<h2 style='color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px;'>4. RESULTS AND SUMMARY</h2>"
+
+'<div class="result-box">'
+'<div class="result-title">Design Summary</div>'
+'<table>'
+'<tr><th>Parameter</th><th>Required</th><th>Provided</th><th>Status</th></tr>'
+'<tr><td>Moment Capacity</td><td>{M_max/kNm} kN·m</td><td>120 kN·m</td><td style="color:green; font-weight:bold">✓ OK</td></tr>'
+'<tr><td>Shear Capacity</td><td>{V_max/kN} kN</td><td>150 kN</td><td style="color:green; font-weight:bold">✓ OK</td></tr>'
+'</table>'
+'</div>'
+
+'<div class="info-box">'
+'<b>Recommendations:</b>'
+'<ul>'
+'<li>All structural members shall be constructed as per approved drawings.</li>'
+'<li>Concrete shall be properly cured for minimum 7 days.</li>'
+'<li>Any deviations from design shall be reported to the engineer.</li>'
+'</ul>'
+'</div>'
+
+'<hr style="border: 1px solid #dee2e6; margin: 30px 0;">'
+
+"<h2 style='color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px;'>5. REFERENCES</h2>"
+
+'<ol>'
+'<li>CSA A23.3-19: Design of Concrete Structures, Canadian Standards Association</li>'
+'<li>National Building Code of Canada (NBCC) 2020</li>'
+'<li>[Add other references as needed]</li>'
+'</ol>'
+
+'<div class="signature-box">'
+'<div>'
+'<div class="signature-line">Prepared By: _______________________</div>'
+'<p style="text-align:center; margin-top:5px;">John Smith, P.Eng<br>Date: January 26, 2025</p>'
+'</div>'
+'<div>'
+'<div class="signature-line">Reviewed By: _______________________</div>'
+'<p style="text-align:center; margin-top:5px;">Jane Doe, P.Eng<br>Date: _______________</p>'
+'</div>'
+'</div>'
+
+'<div class="footer">'
+'<p style="font-size:12px; margin:5px 0;">This calculation sheet has been prepared for the specific project mentioned above.</p>'
+'<p style="font-size:12px; margin:5px 0;">It shall not be used for any other purpose without written permission.</p>'
+'<p style="font-size:12px; margin:5px 0; font-weight:bold;">© 2025 [Your Company Name] - All Rights Reserved</p>'
+'<p style="font-size:11px; margin:5px 0; color:#999;">Page 1 of 1</p>'
+'</div>'
