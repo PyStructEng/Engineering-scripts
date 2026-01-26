@@ -243,9 +243,15 @@ E_c = 4500*sqrt(f_c/MPa)*MPa
 
 '<table>'
 '<tr><th>Material</th><th>Property</th><th>Value</th><th>Unit</th></tr>'
-'<tr><td>Concrete</td><td>f\'c</td><td style="text-align:right">{f_c/MPa}</td><td>MPa</td></tr>'
-'<tr><td>Concrete</td><td>Ec</td><td style="text-align:right">{E_c/MPa}</td><td>MPa</td></tr>'
-'<tr><td>Steel</td><td>fy</td><td style="text-align:right">{f_y/MPa}</td><td>MPa</td></tr>'
+'<tr><td>Concrete</td><td>f\'c</td><td style="text-align:right;">'
+f_c|MPa
+'</td><td>MPa</td></tr>'
+'<tr><td>Concrete</td><td>Ec</td><td style="text-align:right;">'
+E_c|MPa
+'</td><td>MPa</td></tr>'
+'<tr><td>Steel</td><td>fy</td><td style="text-align:right;">'
+f_y|MPa
+'</td><td>MPa</td></tr>'
 '</table>'
 
 '</div>'
@@ -348,8 +354,12 @@ ratio = 0.85
 '<div class="result-title">Design Summary</div>'
 '<table>'
 '<tr><th>Parameter</th><th>Required</th><th>Provided</th><th>Status</th></tr>'
-'<tr><td>Moment Capacity</td><td>{M_max/kNm} kN·m</td><td>120 kN·m</td><td style="color:green; font-weight:bold">✓ OK</td></tr>'
-'<tr><td>Shear Capacity</td><td>{V_max/kN} kN</td><td>150 kN</td><td style="color:green; font-weight:bold">✓ OK</td></tr>'
+'<tr><td>Moment Capacity</td><td>'
+M_max|kNm
+'kN·m</td><td>120 kN·m</td><td style="color:green; font-weight:bold">✓ OK</td></tr>'
+'<tr><td>Shear Capacity</td><td>'
+V_max|kN
+'kN</td><td>150 kN</td><td style="color:green; font-weight:bold">✓ OK</td></tr>'
 '</table>'
 '</div>'
 
